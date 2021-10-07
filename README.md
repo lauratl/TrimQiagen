@@ -8,11 +8,10 @@ TrimQiagen  assumes that the QIAseq targeted DNA panels library looks like this:
                                      <-------------------------R1----------------------
     -------------------------R2---------------------->                                 
 
- - UMIs are random sequences default length 12 used downstream in the pipeline to remove duplicates. In order to post-process the FASTQs, UMIs must be removed from the read sequence and appended to the read name.  
- - Adapters must be removed before mapping to the reference genome, to avoid mismatches
-
+- UMIs are random sequences default length 12 used downstream in the pipeline to remove duplicates. In order to post-process the FASTQs, UMIs must be removed from the read sequence and appended to the read name.  
+- Adapters must be removed before mapping to the reference genome, to avoid mismatches
 	- R2 adapter is by default the sequence ATTGGAGTCCT, or AGGACTCCAAT when it appears as the reverse complement.
-        - R1 adapter is by default the sequence CAAAACGCAATACTGTACATT, or AATGTACAGTATTGCGTTTTG when it appears as the reverse complement.
+	- R1 adapter is by default the sequence CAAAACGCAATACTGTACATT, or AATGTACAGTATTGCGTTTTG when it appears as the reverse complement.
     
 
 R2 reads would  have the following structure:
@@ -32,7 +31,10 @@ R1 reads would have the following structure:
     AAAAAAAAAAAAAAAAAAAAAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXAAAAAAAAAAAUUUUUUUUUUUU
 
     - R1 and R2 adapters can be totally or partially present at the beginning or at the end of the read, respectively. They should be in the reverse complement form 
-    Apart from extracting the UMIs and removing the adapters, we want to discard those read pairs that don't present the expected structure. Since UMIs are random sequences, we have to rely mainly on the adapters for this. We remove read pairs that:
+
+
+
+Apart from extracting the UMIs and removing the adapters, we want to discard those read pairs that don't present the expected structure. Since UMIs are random sequences, we have to rely mainly on the adapters for this. We remove read pairs that:
     - Don't have the R2 Adapter at the expected position in R2. But sequencing machines behave in two different ways: 
         a) Some machines have no problem sequencing the adapter. In this case, we just look for the adapter sequence, optionally allowing for mismatches
         b) Other machines have problems reading the same sequencing at the same position across all the reads, leading to a decrease in the base qualities. In this case we cannot search for the sequence itself, but we can detect the decrease in the base quality scores in its expected position.
