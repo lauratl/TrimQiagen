@@ -1,5 +1,7 @@
 # TrimQiagen
 
+## Background
+
 TrimQiagen  assumes that the QIAseq targeted DNA panels library looks like this:
 
         UMI      R2 Adapter           Sequence to keep                 R1 adapter      
@@ -63,4 +65,70 @@ Examples of R1 trimming:
         ATTGGAGTCCTXXXXXXXXXXXXXXXXXXXXXXXXXXX -> .       # Complete
         ACTGTACATTXXXXXXXXXXXXXXXXXXXXXXXXXXXX -> .       # Partial
     
-   
+
+
+## Usage
+
+TrimQiagen works with Python3. Default parameters are our preferred ones for QIAseq gene panels. 
+
+
+```
+$ python src/TrimQiagen.py -h
+usage: TrimQiagen.py [-h] [--r1 R1] [--r2 R2] [--o1 O1] [--o2 O2] [--umi_start UMI_START] [--umi_end UMI_END]
+                     [--adapter_r2_start ADAPTER_R2_START] [--adapter_r2_end ADAPTER_R2_END]
+                     [--adapter_r2_seq ADAPTER_R2_SEQ] [--adapter_r2_mismatches ADAPTER_R2_MISMATCHES]
+                     [--adapter_r2_maxlowqual ADAPTER_R2_MAXLOWQUAL]
+                     [--adapter_r2_ignorequalpos ADAPTER_R2_IGNOREQUALPOS]
+                     [--adapter_r2_highqualsallowed ADAPTER_R2_HIGHQUALSALLOWED] [--adapter_r1_seq ADAPTER_R1_SEQ]
+                     [--min_read_length MIN_READ_LENGTH] [--explain] [--verbose] [--test_parameters]
+                     [--min_matches_a1 MIN_MATCHES_A1] [--min_matches_a2 MIN_MATCHES_A2]
+                     [--min_matches_trimmed_stats MIN_MATCHES_TRIMMED_STATS]
+
+Trim Qiagen reads. Remove R1 and R2 adapters and append UMI to the read name. Reads are only kept if they meet one
+of these criteria: a) They have the R2 adapter sequence in the expected position [adapter_r2_start, adapter_r2_end],
+allowing adapter_r2_mismatches mismatches. b)They show a decrease in the base qualities at [adapter_r2_start,
+adapter_r2_end], being lower than adapter_r2_maxlowqual in all positions but adapter_r2_ignorequalpos
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --r1 R1               Input file for R1
+  --r2 R2               Input file for R2
+  --o1 O1               Output file for R1 (Default: R1.fastq.trimmed)
+  --o2 O2               Output file for R2 (Default: R2.fastq.trimmed)
+  --umi_start UMI_START
+                        1-based position for UMI start (Default: 1)
+  --umi_end UMI_END     1-based position for UMI end (Default: 12)
+  --adapter_r2_start ADAPTER_R2_START
+                        1-based position for R2 adapter start (Default: 13)
+  --adapter_r2_end ADAPTER_R2_END
+                        1-based position for R2 adapter end (Default: adapter_r2_start + len(adapter_r2_seq) -1)
+  --adapter_r2_seq ADAPTER_R2_SEQ
+                        R2 adapter sequence (Default: ATTGGAGTCCT)
+  --adapter_r2_mismatches ADAPTER_R2_MISMATCHES
+                        Max number of mismatches allowed for R2 adapter (Default: 1)
+  --adapter_r2_maxlowqual ADAPTER_R2_MAXLOWQUAL
+                        Maximum base quality score to be considered low quality base in R2 adapter (Default: 25)
+  --adapter_r2_ignorequalpos ADAPTER_R2_IGNOREQUALPOS
+                        Comma-separated positions to ignore the low quality test in R2 adapter (Default: 18)
+  --adapter_r2_highqualsallowed ADAPTER_R2_HIGHQUALSALLOWED
+                        Maximum positions allowed to have higher qual than adapter_r2_maxlowqual and still be
+                        considered adapter (Default: 2)
+  --adapter_r1_seq ADAPTER_R1_SEQ
+                        R1 adapter sequence. It appears as reverse complement in R1. (Default:
+                        CAAAACGCAATACTGTACATT)
+  --min_read_length MIN_READ_LENGTH
+                        Min read length to keep the read pair (Default: 70)
+  --explain             Explain the tool behaviour
+  --verbose             Show the process read by read
+  --test_parameters     Show which paremeters will be used
+  --min_matches_a1 MIN_MATCHES_A1
+                        Minimum length of initial/terminal matches to consider R1 adapter as present in R1 or
+                        revComp R1 adapter as present in R2, and thus remove the read pair (Default: 5)
+  --min_matches_a2 MIN_MATCHES_A2
+                        Minimum length of initial/terminal matches to consider R2 adapter as present in R1 or
+                        revComp R2 adapter as present in R2, and thus remove the read pair (Default: 5)
+  --min_matches_trimmed_stats MIN_MATCHES_TRIMMED_STATS
+                        Minimum length of proper adapters matches when trimming to count it for the stats (Default:
+                        4) 
+
+```  
