@@ -35,13 +35,13 @@ R1 reads would have the following structure:
 
 
 Apart from extracting the UMIs and removing the adapters, we want to discard those read pairs that don't present the expected structure. Since UMIs are random sequences, we have to rely mainly on the adapters for this. We remove read pairs that:
-    - Don't have the R2 Adapter at the expected position in R2. But sequencing machines behave in two different ways: 
-        a) Some machines have no problem sequencing the adapter. In this case, we just look for the adapter sequence, optionally allowing for mismatches
-        b) Other machines have problems reading the same sequencing at the same position across all the reads, leading to a decrease in the base qualities. In this case we cannot search for the sequence itself, but we can detect the decrease in the base quality scores in its expected position.
+- Don't have the R2 Adapter at the expected position in R2. But sequencing machines behave in two different ways:
+	- Some machines have no problem sequencing the adapter. In this case, we just look for the adapter sequence, optionally allowing for mismatches
+	- Other machines have problems reading the same sequencing at the same position across all the reads, leading to a decrease in the base qualities. In this case we cannot search for the sequence itself, but we can detect the decrease in the base quality scores in its expected position.
      If we find the adapter following one of these approaches, the read pair is considered correct and it will be written to the output files.
-    - Have any of the adapters in the normal form in R1 they should be in the reverse complement form
-    - Have any of the adapters in the reverse complement form in R2 they should be in the normal form
-    - Have at least one of the reads R1 or R2 shorter than 70 or the value specified by the user
+- Have any of the adapters in the normal form in R1 they should be in the reverse complement form
+- Have any of the adapters in the reverse complement form in R2 they should be in the normal form
+- Have at least one of the reads R1 or R2 shorter than 70 or the value specified by the user
 
 
 In the output fastqs, adapters are removed and UMIs are appended to the read name to match downstream analysis requirements. UMI and adapter positions are removed from both the sequence and the base quality string. 
